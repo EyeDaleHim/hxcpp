@@ -309,9 +309,9 @@ static const char * const dwarf_section_names[DEBUG_MAX] =
   "__debug_abbrev",
   "__debug_ranges",
   "__debug_str",
-  "__debug_addr",
+  "", /* DEBUG_ADDR */
   "__debug_str_offs",
-  "__debug_line_str",
+  "", /* DEBUG_LINE_STR */
   "__debug_rnglists"
 };
 

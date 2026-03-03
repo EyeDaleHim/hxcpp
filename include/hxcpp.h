@@ -347,9 +347,6 @@ typedef PropertyAccessMode PropertyAccess;
 #include "Enum.h"
 #include <hx/Interface.h>
 #include <hx/Telemetry.h>
-#if defined(HX_LINUX) && defined(HXCPP_TRACY)
-#include <hx/TelemetryTracy.h>
-#endif
 #if defined(__OBJC__) && defined(HXCPP_OBJC)
   #include <hx/ObjcHelpers.h>
 #endif

@@ -58,9 +58,6 @@ TRACY_API bool IsProfilerStarted();
 #  define TracyIsStarted true
 #endif
 
-TRACY_API bool BeginSamplingProfiling();
-TRACY_API void EndSamplingProfiling();
-
 class GpuCtx;
 class Profiler;
 class Socket;
@@ -254,9 +251,6 @@ public:
         return 0;  // unreachable branch
 #endif
     }
-
-    bool BeginSamplingProfiling();
-    void EndSamplingProfiling();
 
     tracy_force_inline uint32_t GetNextZoneId()
     {
@@ -726,9 +720,6 @@ public:
 #ifdef TRACY_FIBERS
     static tracy_force_inline void EnterFiber( const char* fiber, int32_t groupHint )
     {
-#ifdef TRACY_ON_DEMAND
-        if( !GetProfiler().IsConnected() ) return;
-#endif
         TracyQueuePrepare( QueueType::FiberEnter );
         MemWrite( &item->fiberEnter.time, GetTime() );
         MemWrite( &item->fiberEnter.fiber, (uint64_t)fiber );
@@ -738,9 +729,6 @@ public:
 
     static tracy_force_inline void LeaveFiber()
     {
-#ifdef TRACY_ON_DEMAND
-        if( !GetProfiler().IsConnected() ) return;
-#endif
         TracyQueuePrepare( QueueType::FiberLeave );
         MemWrite( &item->fiberLeave.time, GetTime() );
         TracyQueueCommit( fiberLeave );
@@ -1003,6 +991,7 @@ private:
 
     double m_timerMul;
     uint64_t m_resolution;
+    uint64_t m_delay;
     std::atomic<int64_t> m_timeBegin;
     uint32_t m_mainThread;
     uint64_t m_epoch, m_exectime;
@@ -1043,7 +1032,6 @@ private:
     std::atomic<bool> m_isConnected;
 #ifdef TRACY_ON_DEMAND
     std::atomic<uint64_t> m_connectionId;
-    std::atomic<bool> m_symbolsBusy;
 
     TracyMutex m_deferredLock;
     FastVector<QueueItem> m_deferredQueue;

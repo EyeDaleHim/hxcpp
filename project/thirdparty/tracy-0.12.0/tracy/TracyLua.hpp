@@ -145,13 +145,6 @@ TRACY_API LuaZoneState& GetLuaZoneState();
 namespace detail
 {
 
-static inline void LuaShortenSrc( char* dst, const char* src )
-{
-    size_t l = std::min( (size_t)255, strlen( src ) );
-    memcpy( dst, src, l );
-    dst[l] = 0;
-}
-
 #ifdef TRACY_HAS_CALLSTACK
 static tracy_force_inline void SendLuaCallstack( lua_State* L, uint32_t depth )
 {
@@ -195,6 +188,13 @@ static tracy_force_inline void SendLuaCallstack( lua_State* L, uint32_t depth )
     MemWrite( &item->callstackAllocFat.ptr, (uint64_t)ptr );
     MemWrite( &item->callstackAllocFat.nativePtr, (uint64_t)Callstack( depth ) );
     TracyQueueCommit( callstackAllocFatThread );
+}
+
+static inline void LuaShortenSrc( char* dst, const char* src )
+{
+    size_t l = std::min( (size_t)255, strlen( src ) );
+    memcpy( dst, src, l );
+    dst[l] = 0;
 }
 
 static inline int LuaZoneBeginS( lua_State* L )

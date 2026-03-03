@@ -8,8 +8,8 @@
 #  endif
 
 #  if defined _WIN32
-#    include "../common/TracyWinFamily.hpp"
-#    if !defined TRACY_WIN32_NO_DESKTOP
+#    include "../common/TracyUwp.hpp"
+#    ifndef TRACY_UWP
 #      define TRACY_HAS_CALLSTACK 1
 #    endif
 #  elif defined __ANDROID__
@@ -29,10 +29,6 @@
 #  elif defined BSD
 #    define TRACY_HAS_CALLSTACK 6
 #  endif
-
-#if TRACY_HAS_CALLSTACK == 2 || TRACY_HAS_CALLSTACK == 3 || TRACY_HAS_CALLSTACK == 4 || TRACY_HAS_CALLSTACK == 6
-#define TRACY_USE_LIBBACKTRACE
-#endif
 
 #endif
 
